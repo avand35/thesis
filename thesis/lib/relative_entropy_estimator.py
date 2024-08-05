@@ -122,12 +122,27 @@ class DB_stats:
         self.unmsk_histogram_bounds = np.asarray(unmk_bounds)
 
     def get_bucket_idx(self, val):
+        if self.alphabet is not None:
+            if self.hist_idx is None:
+                self.hist_idx = [self.alphabet.index(bound) for bound in self.histogram_bounds]
+            alph_idx = self.alphabet.index(val)
+            for i, bound in enumerate(self.hist_idx[1:]):
+                if alph_idx < bound:
+                    return i
+                
         for i, bound in enumerate(self.histogram_bounds[1:]):
             if val < bound:
                 return i
         return -1
 
     def get_unmsk_bucket_idx(self, val):
+        if self.alphabet is not None:
+            if self.hist_idx is None:
+                self.hist_idx = [self.alphabet.index(bound) for bound in self.unmsk_histogram_bounds]
+            alph_idx = self.alphabet.index(val)
+            for i, bound in enumerate(self.hist_idx[1:]):
+                if alph_idx < bound:
+                    return i
         for i, bound in enumerate(self.unmsk_histogram_bounds[1:]):
             if val < bound:
                 return i
@@ -169,6 +184,7 @@ class DB_stats:
         
         # compute the approximate frequency of each possible value in each bucket
         self.hist_apprx_freq = hist_bin_freq / self.hist_apprx_n_distinct
+        self.hist_idx = hist_idx
 
     def addapt_freq_selectivity(self, selectivity):
         assert(selectivity >= 0.0 and selectivity <= 1.0, "The selectivity needs to be a value between 0.0 and 1.0")
