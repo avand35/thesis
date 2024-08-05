@@ -1,0 +1,1 @@
+COPY region (r_regionkey, r_name, r_comment) FROM '/Users/avanedaei/Desktop/thesis/main/thesis/TPC-H V3.0.1/dbgen/region.csv' DELIMITER '|'  CSV HEADER

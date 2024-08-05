@@ -1,0 +1,79 @@
+-- Relevant Postgres documentation 
+https://www.postgresql.org/docs/current/row-estimation-examples.html
+https://www.postgresql.org/docs/current/view-pg-stats.html 
+
+------------------------------------------------------------------------------------------------
+
+-- Start postgres
+sudo -u postgres psql
+
+-- Connect to DB
+\c <DB_name>
+
+------------------------------------------------------------------------------------------------
+
+-- Tables created
+CREATE TABLE IF NOT EXISTS public."Patient"
+(
+    id integer NOT NULL,
+    name character varying COLLATE pg_catalog."default",
+    gender character varying COLLATE pg_catalog."default",
+    age integer pg_catalog."default",
+    height integer,
+    weight integer,
+    diagnosis character varying COLLATE pg_catalog."default",
+    zip character varying COLLATE pg_catalog."default",
+    phone character varying COLLATE pg_catalog."default",
+    CONSTRAINT "Patient_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Patient"
+    OWNER to postgres;
+
+
+CREATE TABLE IF NOT EXISTS public."Masked_low"
+(
+    id integer NOT NULL,
+    name character varying COLLATE pg_catalog."default",
+    gender character varying COLLATE pg_catalog."default",
+    age character varying COLLATE pg_catalog."default",
+    height integer,
+    weight integer,
+    diagnosis character varying COLLATE pg_catalog."default",
+    zip character varying COLLATE pg_catalog."default",
+    phone character varying COLLATE pg_catalog."default",
+    CONSTRAINT "Masked_low_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Masked_low"
+    OWNER to postgres;
+
+
+CREATE TABLE IF NOT EXISTS public."Masked_high"
+(
+    id integer NOT NULL,
+    name character varying COLLATE pg_catalog."default",
+    gender character varying COLLATE pg_catalog."default",
+    age character varying COLLATE pg_catalog."default",
+    height integer,
+    weight integer,
+    diagnosis character varying COLLATE pg_catalog."default",
+    zip character varying COLLATE pg_catalog."default",
+    phone character varying COLLATE pg_catalog."default",
+    CONSTRAINT "Masked_high_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Masked_high"
+    OWNER to postgres;
+
+
+-- Fill tables
+copy public."Patient" from '/mnt/c/Users/rudi/Documents/PhD/0-Artifacts/ddm/jupyter/syntheticData.csv' delimiter ',' csv header;
+copy public."Masked_low" from '/mnt/c/Users/rudi/Documents/PhD/0-Artifacts/ddm/jupyter/masked_low.csv' delimiter ',' csv header;
+copy public."Masked_high" from '/mnt/c/Users/rudi/Documents/PhD/0-Artifacts/ddm/jupyter/masked_high.csv' delimiter ',' csv header;

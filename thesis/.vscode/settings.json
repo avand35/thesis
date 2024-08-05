@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "thesis",
+            "database": "master",
+            "username": "postgres",
+            "password": "avand"
+        }
+    ],
+    "files.associations": {
+        "malloc.h": "c"
+    }
+}
