@@ -399,15 +399,22 @@ def inverse_suppress_segment(value: str) -> list:
 def inverse_suppress_shippriority(value: str) -> list:
     return [1, 2, 3, 4, 5]
 
-def inverse_generalize_number(value, divisor):
+def inverse_generalize_number(value, divisor, granularity: float, format: str = "{:.1f}"):
     value = float(value)
+    values = []
     factor = value / divisor
-    inverted_result = math.floor(factor) * divisor
-    return [inverted_result]
+    low = value
+    high = divisor * (factor + 1)
 
-def inverse_generalize_number_SO(divisor):
+    arr = np.arange(low, high, granularity)
+    arr = arr[~np.isclose(arr, high)]
+    for j in arr:
+        values.append(format.format(j))
+    return values
+
+def inverse_generalize_number_SO(divisor, granularity: float = 0.1, format: str = "{:.1f}"):
     def partially_applied(value):
-        return inverse_generalize_number(value, divisor)
+        return inverse_generalize_number(value, divisor, granularity, format)
     return partially_applied
 
 def inverse_suppress_phone(masked_phone):

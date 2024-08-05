@@ -112,10 +112,13 @@ class DB_stats:
 
     def inverse_histogram_bounds(self, inverse_mf: Callable[[Any], list]):
         unmk_bounds = []
-        for bound in self.histogram_bounds:
+        hist_size = len(self.histogram_bounds)
+        for i, bound in enumerate(self.histogram_bounds):
             unmk_vals = inverse_mf(bound)
-            unmk_vals.sort()
-            unmk_bounds.append(unmk_vals[-1])
+            if i < hist_size-1:
+                unmk_bounds.append(unmk_vals[0])
+            else:
+                unmk_bounds.append(unmk_vals[-1])
         self.unmsk_histogram_bounds = np.asarray(unmk_bounds)
 
     def get_bucket_idx(self, val):
@@ -261,7 +264,7 @@ def estimate_rel_entropy_no_ref(original_stats: DB_stats, masked_stats: DB_stats
                     approx_q_x = masked_stats.hist_apprx_freq[msk_bin_idx_low]
                     relative_entropy += original_stats.hist_apprx_n_distinct[ogl_bin_idx] * (approx_p_x*np.log2(approx_p_x/approx_q_x))
                 else:
-                    possible_n_distinct = np.zeros(msk_bin_idx_high + 1 - msk_bin_idx_low)
+                    possible_n_distinct = np.zeros(np.abs(msk_bin_idx_high + 1 - msk_bin_idx_low))
                     # compute number of possible values in first and last bin
                     possible_n_distinct[0] = original_stats.alphabet.index(masked_stats.unmsk_histogram_bounds[msk_bin_idx_low + 1]) - original_stats.alphabet.index(low_bin_bound)
                     possible_n_distinct[-1] = original_stats.alphabet.index(high_bin_bound) - original_stats.alphabet.index(masked_stats.unmsk_histogram_bounds[msk_bin_idx_high])
