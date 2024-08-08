@@ -168,6 +168,7 @@ class DB_stats:
         hist_n_distinct = np.asarray([hist_idx[i+1] - hist_idx[i] for i in range(len(hist_idx)-1)])
         total_n_distinct_hist = hist_idx[-1] - hist_idx[0]
 
+        self.hist_idx = hist_idx
         # Remove know values from each bucket
         for val in most_common_vals:
             if not masked:
@@ -184,7 +185,6 @@ class DB_stats:
         
         # compute the approximate frequency of each possible value in each bucket
         self.hist_apprx_freq = hist_bin_freq / self.hist_apprx_n_distinct
-        self.hist_idx = hist_idx
 
     def addapt_freq_selectivity(self, selectivity):
         assert(selectivity >= 0.0 and selectivity <= 1.0, "The selectivity needs to be a value between 0.0 and 1.0")

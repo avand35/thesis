@@ -412,7 +412,7 @@ def inverse_generalize_number(value, divisor, granularity: float, format: str = 
         values.append(format.format(j))
     return values
 
-def inverse_generalize_number_SO(divisor, granularity: float = 0.1, format: str = "{:.1f}"):
+def inverse_generalize_number_SO(divisor, granularity: float = 1.0, format: str = "{:.1f}"):
     def partially_applied(value):
         return inverse_generalize_number(value, divisor, granularity, format)
     return partially_applied
